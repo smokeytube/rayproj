@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/raylib_firstwindow
+raylib_firstwindow.so
+raylib_firstwindow.dylib
+raylib_firstwindow.dll
+raylib_firstwindow.a
+raylib_firstwindow.lib
+raylib_firstwindow-test-*
+*.exe
+*.o
+*.obj
+*.lst

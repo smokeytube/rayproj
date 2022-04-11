@@ -1,0 +1,15 @@
+{
+    "authors": [
+        "zacha"
+    ],
+    "copyright": "Copyright © 2022, zacha",
+    "dependencies": {
+        "raylib-d": "~>4.0.1"
+    },
+    "description": "A minimal D application.",
+    "libs": [
+        "raylibdll"
+    ],
+    "license": "proprietary",
+    "name": "exc"
+}
