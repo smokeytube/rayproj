@@ -13,3 +13,5 @@ raylib_firstwindow-test-*
 *.o
 *.obj
 *.lst
+
+/test/

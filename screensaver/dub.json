@@ -4,6 +4,7 @@
     ],
     "copyright": "Copyright © 2022, zacha",
     "dependencies": {
+        "glui": ">=0.0.0",
         "raylib-d": "~>4.0.1"
     },
     "description": "A minimal D application.",
@@ -11,5 +12,5 @@
         "raylibdll"
     ],
     "license": "proprietary",
-    "name": "exc"
+    "name": "screensaver"
 }
