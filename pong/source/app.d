@@ -7,6 +7,7 @@ import std.format;
 import std.stdio;
 import std.conv;
 import std.string;
+import std.datetime;
 
 import core.math;
 
@@ -23,7 +24,6 @@ float x;
 float y;
 bool point_scored = false;
 
-bool set_fps = true;
 int player_y = (HEIGHT / 2) - 50;
 int player2_y = (HEIGHT / 2) - 50;
 
@@ -34,16 +34,17 @@ int projectile_height = 10;
 float projectile_slope = 1;
 float projectile_speed = 2;
 int paddle_speed = 2;
-int mov_speed = 60;
 
 int player_score = 0;
 int player2_score = 0;
 
+double t = 0;
+
 void main()
 {
-
     //Create window
     InitWindow(WIDTH, HEIGHT, "Pong");
+    SetTargetFPS(60);
 
     scope (exit)
         CloseWindow();
@@ -64,20 +65,26 @@ void main()
     GluiSpace root, clearScreen, endScreen;
 
     clearScreen = vspace(
+        
             .layout!(1, "fill"),
             theme,
             hspace(
+                
                 .layout!(1, "fill"),
             ),
     );
 
     endScreen = hframe(
         vframe(
+
             
+
             .layout!(1, "fill"),
             whiteTheme,
             hspace(
+
             
+
             .layout!(1, "fill"),
             label("Point Scored!"),
             ),
@@ -94,56 +101,53 @@ void main()
         if (point_scored)
         {
             root = endScreen;
-            for (int i = 0; i < 180; i++)
+            if (t >= ((Clock.currTime() - SysTime.fromUnixTime(0)).total!"msecs" / 1000.0))
             {
-                BeginDrawing();
-                root.draw();
-                EndDrawing();
             }
-            root = clearScreen;
-            point_scored = false;
-            projectile_speed = 2;
-            xi = WIDTH / 2;
-            yi = HEIGHT / 2;
+            else
+            {
+                root = clearScreen;
+                point_scored = false;
+                projectile_speed = 2;
+                projectile_slope = 1;
+                xi = WIDTH / 2;
+                yi = HEIGHT / 2;
+            }
         }
-        else
+        BeginDrawing();
+        processEvents();
+
+        //This loop draws the different sides of the pong court. The loop starts at -1 opposed to 0 to have the first square not be drawn.
+        for (int i = -1; i < 30; i += 2)
         {
-            if (set_fps)
-            {
-                SetTargetFPS(mov_speed);
-                set_fps = false;
-            }
-            BeginDrawing();
-            processEvents();
-
-            //This loop draws the different sides of the pong court. The loop starts at -1 opposed to 0 to have the first square not be drawn.
-            for (int i = -1; i < 30; i += 2)
-            {
-                //I looked at an image of pong, and the height was 30 of these squares tall, hence why static_block_size appears often.
-                DrawRectangleV(Vector2(WIDTH / 2 + (HEIGHT / 30) / 4, i * (static_block_size)), Vector2(
-                        static_block_size, static_block_size), Colors
-                        .LIGHTGRAY);
-            }
-            //Draw the top border and bottom border
-            DrawRectangleV(Vector2(0, 0), Vector2(WIDTH, static_block_size), Colors.LIGHTGRAY);
-            DrawRectangleV(Vector2(0, HEIGHT - static_block_size), Vector2(WIDTH, static_block_size), Colors
+            //I looked at an image of pong, and the height was 30 of these squares tall, hence why static_block_size appears often.
+            DrawRectangleV(Vector2(WIDTH / 2 + (HEIGHT / 30) / 4, i * (static_block_size)), Vector2(
+                    static_block_size, static_block_size), Colors
                     .LIGHTGRAY);
-
-            //Draw the paddles
-            DrawRectangleV(Vector2(HEIGHT / 15, player_y), Vector2(paddle_width, paddle_height), Colors
-                    .WHITE);
-            DrawRectangleV(Vector2(WIDTH - (HEIGHT / 15), player2_y), Vector2(paddle_width, paddle_height), Colors
-                    .WHITE);
-
-            DrawText(toStringz(to!string(player_score)), WIDTH / 2 - 50, HEIGHT / 30, 50, Colors
-                    .WHITE);
-            DrawText(toStringz(to!string(player2_score)), WIDTH / 2 + 50, HEIGHT / 30, 50, Colors
-                    .WHITE);
-            updateProjectile();
-            root.draw();
-            ClearBackground(Colors.BLACK);
-            EndDrawing();
         }
+        //Draw the top border and bottom border
+        DrawRectangleV(Vector2(0, 0), Vector2(WIDTH, static_block_size), Colors.LIGHTGRAY);
+        DrawRectangleV(Vector2(0, HEIGHT - static_block_size), Vector2(WIDTH, static_block_size), Colors
+                .LIGHTGRAY);
+
+        //Draw the paddles
+        DrawRectangleV(Vector2(HEIGHT / 15, player_y), Vector2(paddle_width, paddle_height), Colors
+                .WHITE);
+        DrawRectangleV(Vector2(WIDTH - (HEIGHT / 15), player2_y), Vector2(paddle_width, paddle_height), Colors
+                .WHITE);
+
+        DrawText(toStringz(to!string(player_score)), WIDTH / 2 - 50, HEIGHT / 30, 50, Colors
+                .WHITE);
+        DrawText(toStringz(to!string(player2_score)), WIDTH / 2 + 50, HEIGHT / 30, 50, Colors
+                .WHITE);
+        if (!point_scored)
+        {
+            updateProjectile();
+        }
+        root.draw();
+        ClearBackground(Colors.BLACK);
+        EndDrawing();
+
     }
 }
 
@@ -184,6 +188,13 @@ void updateProjectile()
         projectile_speed += 0.05;
     }
 
+    void onScore()
+    {
+        t = ((Clock.currTime() - SysTime.fromUnixTime(0)).total!"msecs" / 1000.0) + 3;
+        projectile_speed = 0;
+        point_scored = true;
+    }
+
     //If statements to make the rectangle bounce off the walls.
     if (x <= (HEIGHT / 15) + paddle_width && y >= player_y && y <= player_y + paddle_height)
     {
@@ -202,16 +213,14 @@ void updateProjectile()
     if (x >= WIDTH - projectile_width)
     {
         player_score++;
-        projectile_speed = 0;
         xi -= 2;
-        point_scored = true;
+        onScore();
     }
     else if (x < 0)
     {
         player2_score++;
-        projectile_speed = 0;
         xi += 2;
-        point_scored = true;
+        onScore();
     }
 
     DrawRectangleV(Vector2(x, y), Vector2(projectile_width, projectile_height), Colors.WHITE);
