@@ -17,8 +17,6 @@ immutable int HEIGHT = 525;
 
 immutable int static_block_size = HEIGHT / 30;
 
-Paddle p = Paddle();
-
 int player_score = 0;
 int player2_score = 0;
 
@@ -38,14 +36,14 @@ struct Projectile
     float x;
     float y;
 
-    private void onBounce()
+    private void onBounce(Paddle *INSTACE)
     {
         float difference_paddle_y;
-        if (p.paddle1_y > p.paddle2_y) {
-            difference_paddle_y = p.paddle1_y - p.paddle2_y;
+        if ((*INSTACE).paddle1_y > (*INSTACE).paddle2_y) {
+            difference_paddle_y = (*INSTACE).paddle1_y - (*INSTACE).paddle2_y;
         }
-        else if (p.paddle1_y < p.paddle2_y) {
-            difference_paddle_y = p.paddle2_y - p.paddle1_y;
+        else if ((*INSTACE).paddle1_y < (*INSTACE).paddle2_y) {
+            difference_paddle_y = (*INSTACE).paddle2_y - (*INSTACE).paddle1_y;
         }
         else {
             difference_paddle_y = 1;
@@ -71,7 +69,7 @@ struct Projectile
         point_scored = true;
     }
 
-    public void updateProjectile()
+    public void updateProjectile(Paddle *INSTACE)
     {
         // NOTE FOR LATER: CALCULATE X AND Y IN MAIN THEN PASS THE VALUES HERE
         xi += projectile_speed * i1;
@@ -81,16 +79,15 @@ struct Projectile
         y = yi * projectile_slope;
 
         //If statements to make the rectangle bounce off the walls.
-        if (x <= (HEIGHT / 15) + p.paddle_width && y >= p.paddle1_y && y <= p.paddle1_y + p
+        if (x <= (HEIGHT / 15) + (*INSTACE).paddle_width && y >= (*INSTACE).paddle1_y && y <= (*INSTACE).paddle1_y + (*INSTACE)
             .paddle_height)
         {
-            onBounce();
+            onBounce(INSTACE);
             i1 = 1;
         }
-        else if (x >= WIDTH - (HEIGHT / 15) - p.paddle_width && y >= p.paddle2_y && y <= p.paddle2_y + p
-            .paddle_height)
+        else if (x >= WIDTH - (HEIGHT / 15) - (*INSTACE).paddle_width && y >= (*INSTACE).paddle2_y && y <= (*INSTACE).paddle2_y + (*INSTACE).paddle_height)
         {
-            onBounce();
+            onBounce(INSTACE);
             i1 = -1;
         }
         if (y >= HEIGHT - projectile_height - static_block_size || y <= static_block_size)
@@ -180,6 +177,7 @@ struct Game {
 
         Projectile projectile = Projectile();
         Background background = Background();
+        Paddle p = Paddle();
 
         scope (exit)
             CloseWindow();
@@ -188,7 +186,7 @@ struct Game {
         while (!WindowShouldClose())
         {
             BeginDrawing();
-            processEvents();
+            processEvents(&p);
 
             background.drawBackground();
 
@@ -216,7 +214,7 @@ struct Game {
             }
             else
             {
-                projectile.updateProjectile();
+                projectile.updateProjectile(&p);
             }
             ClearBackground(Colors.BLACK);
             EndDrawing();
@@ -224,23 +222,23 @@ struct Game {
         }
     }
 
-    private void processEvents()
+    private void processEvents(Paddle *INSTACE)
     {
-        if (IsKeyDown(KeyboardKey.KEY_S) && p.paddle1_y < HEIGHT - p.paddle_height - static_block_size)
+        if (IsKeyDown(KeyboardKey.KEY_S) && (*INSTACE).paddle1_y < HEIGHT - (*INSTACE).paddle_height - static_block_size)
         {
-            p.paddle1_y += p.paddle_speed;
+            (*INSTACE).paddle1_y += (*INSTACE).paddle_speed;
         }
-        else if (IsKeyDown(KeyboardKey.KEY_W) && p.paddle1_y > static_block_size)
+        else if (IsKeyDown(KeyboardKey.KEY_W) && (*INSTACE).paddle1_y > static_block_size)
         {
-            p.paddle1_y -= p.paddle_speed;
+            (*INSTACE).paddle1_y -= (*INSTACE).paddle_speed;
         }
-        if (IsKeyDown(KeyboardKey.KEY_DOWN) && p.paddle2_y < HEIGHT - p.paddle_height - static_block_size)
+        if (IsKeyDown(KeyboardKey.KEY_DOWN) && (*INSTACE).paddle2_y < HEIGHT - (*INSTACE).paddle_height - static_block_size)
         {
-            p.paddle2_y += p.paddle_speed;
+            (*INSTACE).paddle2_y += (*INSTACE).paddle_speed;
         }
-        else if (IsKeyDown(KeyboardKey.KEY_UP) && p.paddle2_y > static_block_size)
+        else if (IsKeyDown(KeyboardKey.KEY_UP) && (*INSTACE).paddle2_y > static_block_size)
         {
-            p.paddle2_y -= p.paddle_speed;
+            (*INSTACE).paddle2_y -= (*INSTACE).paddle_speed;
         }
     }
 }
