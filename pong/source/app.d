@@ -33,80 +33,11 @@ struct Projectile
     float yi = HEIGHT / 2;
     int i1 = -1;
     int i2 = 1;
-    float x;
-    float y;
+    float x = 0;
+    float y = 0;
 
-    private void onBounce(Paddle *INSTACE)
+    public void updateProjectile()
     {
-        float difference_paddle_y;
-        if ((*INSTACE).paddle1_y > (*INSTACE).paddle2_y) {
-            difference_paddle_y = (*INSTACE).paddle1_y - (*INSTACE).paddle2_y;
-        }
-        else if ((*INSTACE).paddle1_y < (*INSTACE).paddle2_y) {
-            difference_paddle_y = (*INSTACE).paddle2_y - (*INSTACE).paddle1_y;
-        }
-        else {
-            difference_paddle_y = 1;
-        }
-        /*Create a new slope, based on the averages of the two pong paddles, to add a little more skill to the game.
-        * The person who is about to hit the ball should aim to have as different of a Y as possible, so that the ball bounces faster
-        * and with a higher slope. The person who is not currently about to hit the ball should aim to make the y as close as possible
-        * with the opponents, so that the ball bounces slower and with a lower slope.
-        *
-        * Min slope = 1/    (HEIGHT/5)
-        * Max slope = 5
-        */
-        float generated_slope = difference_paddle_y/(HEIGHT/5);
-        yi = setSlopeAndYCoord(generated_slope, projectile_slope, yi);
-        projectile_slope = generated_slope;
-        projectile_speed += 0.05;
-    }
-
-    private void onScore()
-    {
-        t = ((Clock.currTime() - SysTime.fromUnixTime(0)).total!"msecs" / 1000.0) + 3;
-        projectile_speed = 0;
-        point_scored = true;
-    }
-
-    public void updateProjectile(Paddle *INSTACE)
-    {
-        // NOTE FOR LATER: CALCULATE X AND Y IN MAIN THEN PASS THE VALUES HERE
-        xi += projectile_speed * i1;
-        yi += projectile_speed * i2;
-
-        x = xi;
-        y = yi * projectile_slope;
-
-        //If statements to make the rectangle bounce off the walls.
-        if (x <= (HEIGHT / 15) + (*INSTACE).paddle_width && y >= (*INSTACE).paddle1_y && y <= (*INSTACE).paddle1_y + (*INSTACE)
-            .paddle_height)
-        {
-            onBounce(INSTACE);
-            i1 = 1;
-        }
-        else if (x >= WIDTH - (HEIGHT / 15) - (*INSTACE).paddle_width && y >= (*INSTACE).paddle2_y && y <= (*INSTACE).paddle2_y + (*INSTACE).paddle_height)
-        {
-            onBounce(INSTACE);
-            i1 = -1;
-        }
-        if (y >= HEIGHT - projectile_height - static_block_size || y <= static_block_size)
-        {
-            i2 *= -1;
-        }
-        if (x >= WIDTH - projectile_width)
-        {
-            player_score++;
-            xi -= 2;
-            onScore();
-        }
-        else if (x < 0)
-        {
-            player2_score++;
-            xi += 2;
-            onScore();
-        }
-
         DrawRectangleV(Vector2(x, y), Vector2(projectile_width, projectile_height), Colors.WHITE);
     }
 
@@ -170,14 +101,14 @@ void main()
 
 
 struct Game {
+    Projectile pr = Projectile();
+    Background background = Background();
+    Paddle pa = Paddle();
+
     public void initialize() {
         //Create window
         InitWindow(WIDTH, HEIGHT, "Pong");
         SetTargetFPS(60);
-
-        Projectile projectile = Projectile();
-        Background background = Background();
-        Paddle p = Paddle();
 
         scope (exit)
             CloseWindow();
@@ -186,16 +117,16 @@ struct Game {
         while (!WindowShouldClose())
         {
             BeginDrawing();
-            processEvents(&p);
+            processEvents();
 
             background.drawBackground();
 
-            p.drawPaddles();
+            pa.drawPaddles();
             DrawText(toStringz(to!string(player_score)), WIDTH / 2 - 50, static_block_size, 50, Colors
                     .WHITE);
             DrawText(toStringz(to!string(player2_score)), WIDTH / 2 + 50, static_block_size, 50, Colors
                     .WHITE);
-            if (projectile.point_scored)
+            if (pr.point_scored)
             {
                 if (t >= ((Clock.currTime() - SysTime.fromUnixTime(0)).total!"msecs" / 1000.0))
                 {
@@ -205,16 +136,17 @@ struct Game {
                 }
                 else
                 {
-                    projectile.point_scored = false;
-                    projectile.projectile_speed = 2;
-                    projectile.projectile_slope = 1;
-                    projectile.xi = WIDTH / 2;
-                    projectile.yi = HEIGHT / 2;
+                    pr.point_scored = false;
+                    pr.projectile_speed = 2;
+                    pr.projectile_slope = 1;
+                    pr.xi = WIDTH / 2;
+                    pr.yi = HEIGHT / 2;
                 }
             }
             else
             {
-                projectile.updateProjectile(&p);
+                generateXandY();
+                pr.updateProjectile();
             }
             ClearBackground(Colors.BLACK);
             EndDrawing();
@@ -222,23 +154,94 @@ struct Game {
         }
     }
 
-    private void processEvents(Paddle *INSTACE)
+    private void generateXandY() {
+        // NOTE FOR LATER: CALCULATE X AND Y IN MAIN THEN PASS THE VALUES HERE
+        pr.xi += pr.projectile_speed * pr.i1;
+        pr.yi += pr.projectile_speed * pr.i2;
+
+        pr.x = pr.xi;
+        pr.y = pr.yi * pr.projectile_slope;
+
+        //If statements to make the rectangle bounce off the walls.
+        if (pr.x <= (HEIGHT / 15) + pa.paddle_width && pr.y >= pa.paddle1_y && pr.y <= pa.paddle1_y + pa
+            .paddle_height)
+        {
+            onBounce();
+            pr.i1 = 1;
+        }
+        else if (pr.x >= WIDTH - (HEIGHT / 15) - pa.paddle_width && pr.y >= pa.paddle2_y && pr.y <= pa.paddle2_y + pa.paddle_height)
+        {
+            onBounce();
+            pr.i1 = -1;
+        }
+        if (pr.y >= HEIGHT - pr.projectile_height - static_block_size || pr.y <= static_block_size)
+        {
+            pr.i2 *= -1;
+        }
+        if (pr.x >= WIDTH - pr.projectile_width)
+        {
+            player_score++;
+            pr.xi -= 2;
+            onScore();
+        }
+        else if (pr.x < 0)
+        {
+            player2_score++;
+            pr.xi += 2;
+            onScore();
+        }
+    }
+
+    private void processEvents()
     {
-        if (IsKeyDown(KeyboardKey.KEY_S) && (*INSTACE).paddle1_y < HEIGHT - (*INSTACE).paddle_height - static_block_size)
+        if (IsKeyDown(KeyboardKey.KEY_S) && pa.paddle1_y < HEIGHT - pa.paddle_height - static_block_size)
         {
-            (*INSTACE).paddle1_y += (*INSTACE).paddle_speed;
+            pa.paddle1_y += pa.paddle_speed;
         }
-        else if (IsKeyDown(KeyboardKey.KEY_W) && (*INSTACE).paddle1_y > static_block_size)
+        else if (IsKeyDown(KeyboardKey.KEY_W) && pa.paddle1_y > static_block_size)
         {
-            (*INSTACE).paddle1_y -= (*INSTACE).paddle_speed;
+            pa.paddle1_y -= pa.paddle_speed;
         }
-        if (IsKeyDown(KeyboardKey.KEY_DOWN) && (*INSTACE).paddle2_y < HEIGHT - (*INSTACE).paddle_height - static_block_size)
+        if (IsKeyDown(KeyboardKey.KEY_DOWN) && pa.paddle2_y < HEIGHT - pa.paddle_height - static_block_size)
         {
-            (*INSTACE).paddle2_y += (*INSTACE).paddle_speed;
+            pa.paddle2_y += pa.paddle_speed;
         }
-        else if (IsKeyDown(KeyboardKey.KEY_UP) && (*INSTACE).paddle2_y > static_block_size)
+        else if (IsKeyDown(KeyboardKey.KEY_UP) && pa.paddle2_y > static_block_size)
         {
-            (*INSTACE).paddle2_y -= (*INSTACE).paddle_speed;
+            pa.paddle2_y -= pa.paddle_speed;
         }
+    }
+
+    private void onBounce()
+    {
+        float difference_paddle_y;
+        if (pa.paddle1_y > pa.paddle2_y) {
+            difference_paddle_y = pa.paddle1_y - pa.paddle2_y;
+        }
+        else if (pa.paddle1_y < pa.paddle2_y) {
+            difference_paddle_y = pa.paddle2_y - pa.paddle1_y;
+        }
+        else {
+            difference_paddle_y = 1;
+        }
+        /*Create a new slope, based on the averages of the two pong paddles, to add a little more skill to the game.
+        * The person who is about to hit the ball should aim to have as different of a Y as possible, so that the ball bounces faster
+        * and with a higher slope. The person who is not currently about to hit the ball should aim to make the y as close as possible
+        * with the opponents, so that the ball bounces slower and with a lower slope.
+        *
+        * Min slope = 1/    (HEIGHT/5)
+        * Max slope = 5
+        */
+        float generated_slope = difference_paddle_y/(HEIGHT/5);
+        pr.yi = pr.setSlopeAndYCoord(generated_slope, pr.projectile_slope, pr.yi);
+        pr.projectile_slope = generated_slope;
+        pr.projectile_speed += 0.05;
+    }
+
+    private void onScore()
+    {
+        t = ((Clock.currTime() - SysTime.fromUnixTime(0)).total!"msecs" / 1000.0) + 3;
+        pr.projectile_speed = 0;
+        pr.point_scored = true;
     }
 }
