@@ -6,6 +6,7 @@ import std.conv;
 import std.random;
 
 import sprites.tank;
+import sprites.background;
 
 immutable int WIDTH = 512;
 immutable int HEIGHT = 512;
@@ -13,7 +14,7 @@ immutable int HEIGHT = 512;
 void main()
 {
 
-    InitWindow(512, 512, "Sorting Algorithms");
+    InitWindow(WIDTH, HEIGHT, "Sorting Algorithms");
     SetTargetFPS(30);
 
     scope (exit)
@@ -29,21 +30,45 @@ void main()
         },
     );
 
-    Tank tank = new Tank();
+    Tank tank = new Tank(false);
+    Background background = new Background();
 
-    float x = 1;
-    while (!WindowShouldClose)
+    int scale = 4;
+
+    tank.setScale(scale);
+    background.setScale(scale);
+
+    float x = 0;
+    while (!WindowShouldClose())
     {
-        x += 0.01;
-        writeln(x);
+        setFullScreen();
         BeginDrawing();
-        tank.drawTank(50, 50);
-        tank.setScale(x);
-        ClearBackground(Colors.BLACK);
+        background.drawBackground(WIDTH, HEIGHT);
+        tank.drawTank(tank.chassie_width/scale, HEIGHT-tank.chassie_height, x);
 
-        root.draw();
+        ClearBackground(Colors.BLUE);
 
         EndDrawing();
     }
 
+}
+
+
+void setFullScreen() {
+    if (IsKeyPressed(KeyboardKey.KEY_ENTER) && (IsKeyDown(KeyboardKey.KEY_LEFT_ALT) || IsKeyDown(KeyboardKey.KEY_RIGHT_ALT)))
+    {
+        int display = GetCurrentMonitor();
+
+        
+        if (IsWindowFullscreen())
+        {
+            SetWindowSize(WIDTH, HEIGHT);
+        }
+        else
+        {
+            SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
+        }
+
+        ToggleFullscreen();
+    }
 }
