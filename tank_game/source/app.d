@@ -11,6 +11,9 @@ import sprites.background;
 immutable int WIDTH = 512;
 immutable int HEIGHT = 512;
 
+float x = 0;
+float y = 0;
+
 void main()
 {
 
@@ -38,13 +41,14 @@ void main()
     tank.setScale(scale);
     background.setScale(scale);
 
-    float x = 0;
+    float j = 0;
     while (!WindowShouldClose())
     {
         setFullScreen();
         BeginDrawing();
-        background.drawBackground(WIDTH, HEIGHT);
-        tank.drawTank(tank.chassie_width/scale, HEIGHT-tank.chassie_height, x);
+        processEvents();
+        background.drawBackground(x, y, WIDTH, HEIGHT);
+        tank.drawTank(tank.chassie_width/scale, HEIGHT-tank.chassie_height, j);
 
         ClearBackground(Colors.BLUE);
 
@@ -70,5 +74,18 @@ void setFullScreen() {
         }
 
         ToggleFullscreen();
+    }
+}
+
+
+void processEvents()
+{
+    if (IsKeyDown(KeyboardKey.KEY_LEFT))
+    {
+        x -= 1;
+    }
+    else if (IsKeyDown(KeyboardKey.KEY_RIGHT))
+    {
+        x += 1;
     }
 }
