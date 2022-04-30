@@ -5,14 +5,21 @@ import std.stdio;
 import std.conv;
 import std.random;
 
+// RUSSIAN PIG AND RUSSIAN SMART CAR
+
 import sprites.tank;
 import sprites.background;
+import sprites.smartcar;
 
-immutable int WIDTH = 512;
+immutable int WIDTH = 800;
 immutable int HEIGHT = 512;
 
 float x = 0;
 float y = 0;
+
+float rot = 0;
+
+int scale = 4;
 
 void main()
 {
@@ -35,20 +42,19 @@ void main()
 
     Tank tank = new Tank(false);
     Background background = new Background();
-
-    int scale = 4;
+    SmartCar smartCar = new SmartCar();
 
     tank.setScale(scale);
     background.setScale(scale);
+    smartCar.setScale(scale);
 
-    float j = 0;
     while (!WindowShouldClose())
     {
-        setFullScreen();
         BeginDrawing();
         processEvents();
         background.drawBackground(x, y, WIDTH, HEIGHT);
-        tank.drawTank(tank.chassie_width/scale, HEIGHT-tank.chassie_height, j);
+        tank.drawTank(tank.chassie_width/scale, HEIGHT-tank.chassie_height, rot);
+        smartCar.drawCar(1000-x, HEIGHT-smartCar.car_height);
 
         ClearBackground(Colors.BLUE);
 
@@ -58,34 +64,23 @@ void main()
 }
 
 
-void setFullScreen() {
-    if (IsKeyPressed(KeyboardKey.KEY_ENTER) && (IsKeyDown(KeyboardKey.KEY_LEFT_ALT) || IsKeyDown(KeyboardKey.KEY_RIGHT_ALT)))
-    {
-        int display = GetCurrentMonitor();
-
-        
-        if (IsWindowFullscreen())
-        {
-            SetWindowSize(WIDTH, HEIGHT);
-        }
-        else
-        {
-            SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
-        }
-
-        ToggleFullscreen();
-    }
-}
-
-
 void processEvents()
 {
     if (IsKeyDown(KeyboardKey.KEY_LEFT))
     {
-        x -= 1;
+        x -= scale;
     }
     else if (IsKeyDown(KeyboardKey.KEY_RIGHT))
     {
-        x += 1;
+        x += scale;
+    }
+
+    if (IsKeyDown(KeyboardKey.KEY_UP) && rot > -45)
+    {
+        rot -= 1;
+    }
+    else if (IsKeyDown(KeyboardKey.KEY_DOWN) && rot < 10)
+    {
+        rot += 1;
     }
 }
