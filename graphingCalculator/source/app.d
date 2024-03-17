@@ -12,8 +12,13 @@ immutable int WIDTH = 512*2;
 immutable int HEIGHT = 512*2;
 
 //All data mutable by the user
+int graphW = WIDTH;
+int graphH = HEIGHT;
+int guiW = WIDTH;
+int guiH = HEIGHT;
 double gridThickness = 0.025;
-int gridScaling = 10;
+int gridScalingX = 100;
+int gridScalingY = 100;
 int offsetX = 0;
 int offsetY = 0*-1;
 
@@ -119,12 +124,12 @@ void main() {
 
     // --------- User interface end ---------
 
-    //Loop which will draw the screensaver and UI while the window is not closed
 	while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(Colors.BLACK);
         grid();
+        graph("x^2");
         update();
         root.draw();
         EndDrawing();
@@ -138,6 +143,35 @@ void update()
 
 void grid()
 {
-    DrawRectangleV(Vector2(WIDTH/2-offsetX, gridThickness*HEIGHT/2), Vector2(WIDTH/100, HEIGHT-gridThickness*HEIGHT), Colors.WHITE);
-    DrawRectangleV(Vector2(gridThickness*WIDTH/2, HEIGHT/2-offsetY), Vector2(WIDTH-gridThickness*WIDTH, HEIGHT/100), Colors.WHITE);
+
+    graphRectangle(0, 0, WIDTH/100, HEIGHT-gridThickness*HEIGHT, Colors.WHITE);
+    graphRectangle(0, 0, WIDTH-gridThickness*WIDTH, HEIGHT/100, Colors.WHITE);
+    
+    for (int z = -1; z < 2; z+=2) {
+        int markerPos = 0;
+        while (markerPos < WIDTH-offsetX && markerPos > -WIDTH-offsetX) {
+            graphRectangle(markerPos, 0, WIDTH/100, 50, Colors.RED);
+            markerPos += z;
+        }
+    }
+
+    for (int z = -1; z < 2; z+=2) {
+        int markerPos = 0;
+        while (markerPos < HEIGHT-offsetY && markerPos > -HEIGHT-offsetY) {
+            graphRectangle(0, markerPos, 50, HEIGHT/100, Colors.RED);
+            markerPos += z;
+        }
+    }
+}
+
+void graph(string str) {
+    for (double z = 10*(-offsetX-500); z < 10*(graphW-offsetX); z += 0.1) {
+        graphRectangle(z, z*z, 4, 4, Colors.BLUE);
+    }
+    graphRectangle(2, 2, 40, 40, Colors.BLUE);
+}
+
+
+void graphRectangle(double x, double y, double w, double h, Color c) {
+    DrawRectangleV(Vector2((x*gridScalingX+WIDTH/2-offsetX-w/2), (-y*gridScalingY+HEIGHT/2-offsetY-h/2)), Vector2(w, h), c);
 }
