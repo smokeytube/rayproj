@@ -19,7 +19,7 @@ class SmartCar {
         setScale();
     }
 
-    void drawCar(float x, float y) {
+    void draw(float x, float y) {
         DrawTextureRec(this.car, this.car_rect, Vector2(x, y), Colors.WHITE);
     }
 

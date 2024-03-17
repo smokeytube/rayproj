@@ -28,7 +28,7 @@ class Background {
         setScale();
     }
 
-    void drawBackground(float x, float y, int screen_width, int screen_height) {
+    void draw(float x, float y, int screen_width, int screen_height) {
         this.background_rect1 = Rectangle(x, y, this.background_width, this.background_height);
         this.background_rect2 = Rectangle(x/1.25, y, this.background_width, this.background_height);
         this.background_rect3 = Rectangle(x/2, y, this.background_width, this.background_height);

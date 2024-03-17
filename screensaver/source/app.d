@@ -167,8 +167,6 @@ void update()
 	x = xi;
 	y = yi * slope;
 
-    writeln(x);
-
     //If statements to make the rectangle bounce off the walls.
 	if (x >= WIDTH - rec_width)
 	{

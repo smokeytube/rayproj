@@ -32,14 +32,14 @@ class Tank {
         setScale();
     }
 
-    void drawTank(float x, float y, float rot) {
+    void draw(float x, float y, float rot) {
         DrawTextureRec(this.chassie, this.chassie_rect, Vector2(x, y), Colors.WHITE);
         if (this.mirrored) {
-            DrawTextureEx(this.turret, Vector2(x+this.scale*10, y+this.scale*2), rot+180, 1, Colors.WHITE);
+            DrawTextureEx(this.turret, Vector2(x+this.scale*10, y+this.scale*2), (rot+180)*-1, 1, Colors.WHITE);
         }
         else
         {
-            DrawTextureEx(this.turret, Vector2(x+this.scale*32, y+this.scale*2), rot, 1, Colors.WHITE);
+            DrawTextureEx(this.turret, Vector2(x+this.scale*32, y+this.scale*2), rot*-1, 1, Colors.WHITE);
         }
     }
 
