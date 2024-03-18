@@ -19,8 +19,8 @@ int guiH = HEIGHT;
 double gridThickness = 0.025;
 int gridScalingX = 100;
 int gridScalingY = 100;
-int offsetX = 0;
-int offsetY = 0*-1;
+int offsetX = 100;
+int offsetY = 100;
 
 
 void main() {
@@ -51,6 +51,8 @@ void main() {
 
     GluiScrollBar slopeBar, widthBar, heightBar, speedBar;
     GluiSpace root, settings, clearScreen;
+
+    GluiTextInput _offsetX;
 
     settings = vspace(
         .layout!(1, "fill"),
@@ -96,6 +98,19 @@ void main() {
                 }),
             ),
         ),
+        vscrollFrame(
+            .layout!(1, "fill", "start"),
+            rightTheme,
+            vspace(
+                label("TEST"),
+                _offsetX = textInput("Your input..."),
+                
+
+                button("Save", delegate {
+                    offsetX = to!int(_offsetX.value);
+                }),
+            ),
+        ),
     );
 
     clearScreen = vspace(
@@ -129,7 +144,7 @@ void main() {
         BeginDrawing();
         ClearBackground(Colors.BLACK);
         grid();
-        graph("x^2");
+        // graph("x^2");
         update();
         root.draw();
         EndDrawing();
@@ -144,8 +159,8 @@ void update()
 void grid()
 {
 
-    graphRectangle(0, 0, WIDTH/100, HEIGHT-gridThickness*HEIGHT, Colors.WHITE);
-    graphRectangle(0, 0, WIDTH-gridThickness*WIDTH, HEIGHT/100, Colors.WHITE);
+    graphRectangle(0, 0-offsetX/100, WIDTH/100, HEIGHT-gridThickness*HEIGHT, Colors.WHITE);
+    graphRectangle(0+offsetY/100, 0, WIDTH-gridThickness*WIDTH, HEIGHT/100, Colors.WHITE);
     
     for (int z = -1; z < 2; z+=2) {
         int markerPos = 0;
@@ -165,8 +180,11 @@ void grid()
 }
 
 void graph(string str) {
-    for (double z = 10*(-offsetX-500); z < 10*(graphW-offsetX); z += 0.1) {
-        graphRectangle(z, z*z, 4, 4, Colors.BLUE);
+    double inc = 0.1;
+    for (double z = 10*(-offsetX-500); z < 10*(graphW-offsetX); z += inc) {
+        graphRectangle(z, z*z - z, 4, 4, Colors.BLUE);
+        double nextY = (z+inc)*(z+inc) - (z+inc);
+        graphLine(z, z*z - z, z+inc, nextY, Colors.RED);
     }
     graphRectangle(2, 2, 40, 40, Colors.BLUE);
 }
@@ -174,4 +192,8 @@ void graph(string str) {
 
 void graphRectangle(double x, double y, double w, double h, Color c) {
     DrawRectangleV(Vector2((x*gridScalingX+WIDTH/2-offsetX-w/2), (-y*gridScalingY+HEIGHT/2-offsetY-h/2)), Vector2(w, h), c);
+}
+
+void graphLine(double sx, double sy, double ex, double ey, Color c) {
+    DrawLineV(Vector2((sx*gridScalingX+WIDTH/2-offsetX), (-sy*gridScalingY+HEIGHT/2-offsetY)), Vector2((ex*gridScalingX+WIDTH/2-offsetX), (-ey*gridScalingY+HEIGHT/2-offsetY)), c);
 }
