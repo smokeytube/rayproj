@@ -19,8 +19,8 @@ int guiH = HEIGHT;
 double gridThickness = 0.025;
 int gridScalingX = 100;
 int gridScalingY = 100;
-int offsetX = 100;
-int offsetY = 100;
+int offsetX = 0;
+int offsetY = 0;
 
 
 void main() {
@@ -144,7 +144,7 @@ void main() {
         BeginDrawing();
         ClearBackground(Colors.BLACK);
         grid();
-        // graph("x^2");
+        graph("x^2");
         update();
         root.draw();
         EndDrawing();
@@ -159,8 +159,8 @@ void update()
 void grid()
 {
 
-    graphRectangle(0, 0-offsetX/100, WIDTH/100, HEIGHT-gridThickness*HEIGHT, Colors.WHITE);
-    graphRectangle(0+offsetY/100, 0, WIDTH-gridThickness*WIDTH, HEIGHT/100, Colors.WHITE);
+    graphRectangle(0, -offsetY/100, WIDTH/100, HEIGHT-gridThickness*HEIGHT, Colors.WHITE);
+    graphRectangle(offsetX/100, 0, WIDTH-gridThickness*WIDTH, HEIGHT/100, Colors.WHITE);
     
     for (int z = -1; z < 2; z+=2) {
         int markerPos = 0;
@@ -184,9 +184,8 @@ void graph(string str) {
     for (double z = 10*(-offsetX-500); z < 10*(graphW-offsetX); z += inc) {
         graphRectangle(z, z*z - z, 4, 4, Colors.BLUE);
         double nextY = (z+inc)*(z+inc) - (z+inc);
-        graphLine(z, z*z - z, z+inc, nextY, Colors.RED);
+        // graphLine(z, z*z - z, z+inc, nextY, Colors.RED);
     }
-    graphRectangle(2, 2, 40, 40, Colors.BLUE);
 }
 
 
