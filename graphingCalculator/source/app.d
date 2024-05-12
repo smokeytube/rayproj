@@ -4,6 +4,7 @@ import raylib;
 import components.settings;
 import components.gui;
 import components.grid;
+import components.functions;
 
 import std.array;
 import std.range;
@@ -37,6 +38,7 @@ void main() {
         grid.grid();
         grid.graph("x^2");
         gui.draw();
+        Functions.SigmaNotation(-3, 3, 100);
         EndDrawing();
 	}
 }

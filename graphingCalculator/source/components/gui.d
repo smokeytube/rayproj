@@ -14,6 +14,8 @@ import std.conv;
 
 public class Gui {
     private GluiSpace root, settings, clearScreen;
+    private GluiTextInput _offsetX;
+
 
     this() {
         auto theme = makeTheme!q{
@@ -32,10 +34,6 @@ public class Gui {
                 margin.sideTop = 10;
             };
         };
-
-        
-
-        GluiTextInput _offsetX;
 
         settings = vspace(
             .layout!(1, "fill"),

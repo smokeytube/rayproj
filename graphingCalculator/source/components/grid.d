@@ -37,19 +37,22 @@ public class Grid {
     }
 
     void graph(string str) {
-        double inc = 0.2;
+        double inc = 0.1;
         for (double z = 10*(-settings.offsetX-500); z < 10*(settings.graphW-settings.offsetX); z += inc) {
             // graphRectangle(z, z*z, 4, 4, Colors.BLUE);
-            double nextY = (z+inc)*(z+inc);
-            graphLine(z, z*z, z+inc, nextY, Colors.RED);
+            double nextY = (z+inc)*(z+inc)*(z+inc)-3*(z+inc);
+            graphLine(z, z*z*z-3*z, z+inc, nextY, Colors.RED);
         }
     }
 
-    void graphRectangle(double x, double y, double w, double h, Color c) {
+    public static void graphRectangle(double x, double y, double w, double h, Color c) {
+        if (h < 0) {
+            h = h*-1;
+        }
         DrawRectangleV(Vector2((x*settings.gridScalingX+settings.WIDTH/2-settings.offsetX-w/2), (-y*settings.gridScalingY+settings.HEIGHT/2-settings.offsetY-h/2)), Vector2(w, h), c);
     }
 
-    void graphLine(double sx, double sy, double ex, double ey, Color c) {
+    public static void graphLine(double sx, double sy, double ex, double ey, Color c) {
         DrawLineV(Vector2((sx*settings.gridScalingX+settings.WIDTH/2-settings.offsetX), (-sy*settings.gridScalingY+settings.HEIGHT/2-settings.offsetY)), Vector2((ex*settings.gridScalingX+settings.WIDTH/2-settings.offsetX), (-ey*settings.gridScalingY+settings.HEIGHT/2-settings.offsetY)), c);
     }
 }
