@@ -2,10 +2,11 @@ module components.functions;
 
 import glui;
 import raylib;
-import evalex;
+// import evalex;
 
 import components.settings;
 import components.grid;
+import components.evaluator;
 
 import std.array;
 import std.range;
@@ -28,8 +29,9 @@ public class Functions {
     }
 
     public static double evaluateEquation(double x) {
-        string f = replaceAll(settings.equation, settings.reg, to!string(x));
-        scope evaluator = new Eval!double(f);
-        return evaluator.result;
+        return Evaluator(settings.equation, x).eval;
+        // string f = replaceAll(settings.equation, settings.reg, to!string(x));
+        // scope evaluator = new Eval!double(f);
+        // return evaluator.result;
     }
 }
