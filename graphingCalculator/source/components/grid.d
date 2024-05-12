@@ -1,6 +1,7 @@
 module components.grid;
 
 import components.settings;
+import components.functions;
 
 import glui;
 import raylib;
@@ -39,9 +40,8 @@ public class Grid {
     void graph(string str) {
         double inc = 0.1;
         for (double z = 10*(-settings.offsetX-500); z < 10*(settings.graphW-settings.offsetX); z += inc) {
-            // graphRectangle(z, z*z, 4, 4, Colors.BLUE);
-            double nextY = (z+inc)*(z+inc)*(z+inc)-3*(z+inc);
-            graphLine(z, z*z*z-3*z, z+inc, nextY, Colors.RED);
+            double nextY = Functions.evaluateEquation(z+inc);
+            graphLine(z, Functions.evaluateEquation(z), z+inc, nextY, Colors.RED);
         }
     }
 

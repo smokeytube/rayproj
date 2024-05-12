@@ -38,7 +38,7 @@ void main() {
         grid.grid();
         grid.graph("x^2");
         gui.draw();
-        Functions.SigmaNotation(-3, 3, 100);
+        Functions.sigmaNotation(-3, 3, 100);
         EndDrawing();
 	}
 }

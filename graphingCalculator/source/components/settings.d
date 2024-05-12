@@ -1,5 +1,7 @@
 module components.settings;
 
+import std.regex;
+
 public Settings settings;
 
 public struct Settings {
@@ -18,4 +20,8 @@ public struct Settings {
     int offsetY = 0;
     int gridIncPower = 0;
     int gridInc = 0;
+
+    string equation = "x*x*x-3*x";
+
+    auto reg = regex("x");
 }

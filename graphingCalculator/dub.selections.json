@@ -1,11 +1,16 @@
 {
-    "fileVersion": 1,
-    "versions": {
-        "ddmp": "0.0.1-0.dev.3",
-        "fluent-asserts": "0.13.3",
-        "glui": "~main",
-        "libdparse": "0.14.0",
-        "raylib-d": "4.0.1",
-        "stdx-allocator": "2.77.5"
-    }
+	"fileVersion": 1,
+	"versions": {
+		"acd-arithmetic": "0.0.4",
+		"arith-eval": "0.4.1",
+		"ddmp": "0.0.1-0.dev.3",
+		"emsi_containers": "0.9.0",
+		"evalex": "0.0.2",
+		"fluent-asserts": "0.13.3",
+		"glui": "~main",
+		"libdparse": "0.14.0",
+		"pegged": "0.3.3",
+		"raylib-d": "4.0.1",
+		"stdx-allocator": "2.77.5"
+	}
 }
