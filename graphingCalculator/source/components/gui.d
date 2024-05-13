@@ -40,7 +40,11 @@ public class Gui {
             theme,
 
             vframe(
-                button("Close", { root = clearScreen; }),
+                button("Close", delegate { 
+                    root = clearScreen;
+                    s.refresh = true;
+                    writeln("here2");
+                }),
             ),
 
             vscrollFrame(
@@ -73,7 +77,11 @@ public class Gui {
             theme,
 
             vframe(
-                button("Settings", { root = settings; }),
+                button("Settings", delegate { 
+                    root = settings; 
+                    s.refresh = true;
+                    writeln("here");
+                }),
             ),
             hspace(
                 .layout!(1, "fill"),

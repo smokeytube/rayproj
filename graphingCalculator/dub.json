@@ -4,7 +4,6 @@
 	],
 	"copyright": "Copyright © 2022, zacha",
 	"dependencies": {
-		"evalex": "~>0.0.2",
 		"glui": ">=0.0.0",
 		"raylib-d": "~>4.0.1"
 	},
@@ -13,5 +12,5 @@
 		"raylibdll"
 	],
 	"license": "proprietary",
-	"name": "sort"
+	"name": "graphing_calculator"
 }

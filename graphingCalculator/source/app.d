@@ -25,20 +25,19 @@ void main() {
     Gui gui = new Gui();
 
     //Create window
-	InitWindow(settings.WIDTH, settings.HEIGHT, "Visual Graphing Calculator");
+	InitWindow(s.WIDTH, s.HEIGHT, "Visual Graphing Calculator");
+    SetTargetFPS(10);
 
     scope (exit) CloseWindow();
-
-
 
 	while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(Colors.BLACK);
         grid.grid();
-        grid.graph("x^2");
+        Functions.rightSum(-3, 3, 20, 1);
+        grid.graph();
         gui.draw();
-        Functions.sigmaNotation(-3, 3, 100);
         EndDrawing();
 	}
 }

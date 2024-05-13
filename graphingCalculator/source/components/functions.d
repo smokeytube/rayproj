@@ -2,7 +2,6 @@ module components.functions;
 
 import glui;
 import raylib;
-// import evalex;
 
 import components.settings;
 import components.grid;
@@ -17,21 +16,17 @@ import std.regex;
 
 public class Functions {
 
-    public static void sigmaNotation(double a, double b, double n) {
+    public static void rightSum(double a, double b, double n, double buffer = 0) {
         double i = a;
         double y;
         while (i < b) {
             y = evaluateEquation(i);
-            Grid.graphRectangle(i-(((b-a)/n)/2), (y)/2, (b-a)/n*settings.gridScalingX-5, (y)*settings.gridScalingY, Colors.BLUE);
+            Grid.graphRectangle(i-(((b-a)/n)/2)+buffer/s.gridScalingX, (y)/2, (b-a)/n*s.gridScalingX-buffer, (y)*s.gridScalingY, Colors.BLUE);
             i += (b-a)/n;
         }
-        
     }
 
     public static double evaluateEquation(double x) {
-        return Evaluator(settings.equation, x).eval;
-        // string f = replaceAll(settings.equation, settings.reg, to!string(x));
-        // scope evaluator = new Eval!double(f);
-        // return evaluator.result;
+        return Evaluator(s.equation, x).eval;
     }
 }
