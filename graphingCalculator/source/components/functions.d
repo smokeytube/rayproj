@@ -16,13 +16,14 @@ import std.regex;
 
 public class Functions {
 
-    public static void rightSum(double a, double b, double n, double buffer = 0) {
-        double i = a;
+    public static void rightSum(double a, double b, int n, double buffer = 0) {
+        double inc = (b-a)/n;
+        double i = a+inc;
         double y;
-        while (i < b) {
+        while (i < b+inc) {
             y = evaluateEquation(i);
-            Grid.graphRectangle(i-(((b-a)/n)/2)+buffer/s.gridScalingX, (y)/2, (b-a)/n*s.gridScalingX-buffer, (y)*s.gridScalingY, Colors.BLUE);
-            i += (b-a)/n;
+            Grid.graphRectangle(i-((inc)/2)+buffer/s.gridScalingX, (y)/2, inc*s.gridScalingX-buffer, (y)*s.gridScalingY, Colors.BLUE);
+            i += inc;
         }
     }
 

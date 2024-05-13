@@ -30,14 +30,17 @@ void main() {
 
     scope (exit) CloseWindow();
 
+    int n = 1;
+
 	while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(Colors.BLACK);
+        Functions.rightSum(-5, 5, n, 1);
         grid.grid();
-        Functions.rightSum(-3, 3, 20, 1);
         grid.graph();
         gui.draw();
+        n += 1;
         EndDrawing();
 	}
 }
