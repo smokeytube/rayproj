@@ -21,7 +21,7 @@ public struct Settings {
     int gridIncPower = 0;
     int gridInc = 0;
 
-    string equation = "0.01*(x-5)*(x+5)*(x+2)*(x-3)*(x-2)";
+    string equation = "x*x*x-3*x+5";
 
     //All data mutable by the program
     bool refresh = true;

@@ -26,21 +26,21 @@ void main() {
 
     //Create window
 	InitWindow(s.WIDTH, s.HEIGHT, "Visual Graphing Calculator");
-    SetTargetFPS(10);
+    SetTargetFPS(2);
 
     scope (exit) CloseWindow();
 
-    int n = 1;
+    int z = 1;
 
 	while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(Colors.BLACK);
-        Functions.rightSum(-5, 5, n, 1);
+        Functions.middleSum(-5, 5, z, 1);
         grid.grid();
         grid.graph();
         gui.draw();
-        n += 1;
         EndDrawing();
+        z++;
 	}
 }
