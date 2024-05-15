@@ -26,7 +26,7 @@ void main() {
 
     //Create window
 	InitWindow(s.WIDTH, s.HEIGHT, "Visual Graphing Calculator");
-    SetTargetFPS(2);
+    SetTargetFPS(30);
 
     scope (exit) CloseWindow();
 

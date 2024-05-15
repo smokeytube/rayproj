@@ -126,6 +126,16 @@ private:
 				index += 1;
 				lhs = lhs / eval(2);
 			}
+			else if (op == '^' && minPrec < 2)
+			{
+				index += 1;
+				lhs = pow(lhs, eval(2));
+			}
+			else if (op == '%' && minPrec < 2)
+			{
+				index += 1;
+				lhs = lhs % eval(2);
+			}
 			else
 			{
 				break;

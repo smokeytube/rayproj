@@ -21,7 +21,7 @@ public struct Settings {
     int gridIncPower = 0;
     int gridInc = 0;
 
-    string equation = "3+a(x)";
+    string equation = "x%3*x*0.3";
 
     //All data mutable by the program
     bool refresh = true;
