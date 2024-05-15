@@ -1,6 +1,8 @@
 module components.evaluator;
 
 import std;
+import std.math.operations : feqrel;
+import std.math.constants : E;
 
 struct Evaluator
 {
@@ -36,6 +38,15 @@ private:
 		{
 			index += 1;
 			return xValue;
+		}
+		// natural log
+		else if (expr[index] == 'a' && expr[index+1] == '(')
+		{
+			index += 2;
+			double value = log(eval(0));
+			if (eof || expr[index++] != ')')
+				throw new Exception("expected ')' to close parenthetical expression");
+			return value;
 		}
 		else if (expr[index] == '(')
 		{

@@ -45,6 +45,23 @@ public class Functions {
         }
     }
 
+    public static void trapezoidalSum(double a, double b, int n, double rlm, double buffer) {
+        double inc = (b-a)/n;
+        double i = a+inc;
+        double y;
+        int count = 0;
+        while (i < to!int(b)) {
+            y = evaluateEquation(i-inc*rlm);
+            Grid.graphRectangle(i-((inc)/2)+buffer/s.gridScalingX, (y)/2, inc*s.gridScalingX-buffer, (y)*s.gridScalingY, Colors.BLUE);
+            i += inc;
+            count++;
+        }
+        if (count < n) {
+            y = evaluateEquation(i-inc*rlm);
+            Grid.graphRectangle(i-((inc)/2)+buffer/s.gridScalingX, (y)/2, inc*s.gridScalingX-buffer, (y)*s.gridScalingY, Colors.BLUE);
+        }
+    }
+
     public static double evaluateEquation(double x) {
         return Evaluator(s.equation, x).eval;
     }
