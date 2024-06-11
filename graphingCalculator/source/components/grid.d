@@ -3,7 +3,6 @@ module components.grid;
 import components.settings;
 import components.functions;
 
-import glui;
 import raylib;
 
 import std.array;

@@ -1,8 +1,7 @@
-import glui;
 import raylib;
 
 import components.settings;
-import components.gui;
+// import components.gui;
 import components.grid;
 import components.functions;
 
@@ -22,7 +21,6 @@ void main() {
 
 
     Grid grid = new Grid();
-    Gui gui = new Gui();
 
     //Create window
 	InitWindow(s.WIDTH, s.HEIGHT, "Visual Graphing Calculator");
@@ -39,7 +37,7 @@ void main() {
         Functions.middleSum(-5, 5, z, 1);
         grid.grid();
         grid.graph();
-        gui.draw();
+        // gui.draw();
         EndDrawing();
         z++;
 	}

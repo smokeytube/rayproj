@@ -1,6 +1,5 @@
 module components.functions;
 
-import glui;
 import raylib;
 
 import components.settings;
