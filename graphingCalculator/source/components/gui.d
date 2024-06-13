@@ -19,9 +19,30 @@ public class Gui
     this()
     {
 
+        Theme theme = Theme.init.makeTheme!q{
+            Space.styleAdd!q{
+                margin = 5;
+                margin.sideY = 10;
+            };
+            Frame.styleAdd!q{
+                margin = 10;
+                backgroundColor = color!"#fffa";
+            };
+            Button!().styleAdd!q{
+                padding.sideTop = 100;
+                textColor = color!"#ffffff";
+                
+            };
+        };
+
         clearScreen = vspace(
-            .layout!(1, "fill"),
-            button("Settings", delegate{ writeln("hello"); })
+            
+                .layout!(1, "fill"),
+                theme,
+                vframe(
+                    button("Settings", delegate{ writeln("hello"); }),
+                    button("Close", { root = clearScreen; }),
+                ),
         );
 
         root = clearScreen;

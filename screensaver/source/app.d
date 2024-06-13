@@ -50,7 +50,7 @@ void main() {
             margin.sideY = 10;
         };
         GluiButton!().styleAdd!q{
-            margin.sideTop = 10;
+            padding.sideTop = 100;
         };
     };
 
